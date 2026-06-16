@@ -7,7 +7,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import Browserbase from '@browserbasehq/sdk';
 import { chromium } from 'playwright-core';
 import crypto from 'crypto';
-import { parseExpression } from 'cron-parser';
+import parseExpression from 'cron-parser';
 import { sendRunNotifications } from '@/lib/notifications';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
@@ -186,7 +186,8 @@ export async function GET(req: Request) {
       // Compute next run
       let nextRunAt = null;
       try {
-        const interval = parseExpression(schedule.cronExpression);
+        // @ts-ignore
+        const interval = (parseExpression as any).parseExpression ? (parseExpression as any).parseExpression(schedule.cronExpression) : (parseExpression as any)(schedule.cronExpression);
         nextRunAt = interval.next().toDate();
       } catch (err) {
         console.error('Invalid cron expression for schedule:', schedule.id);

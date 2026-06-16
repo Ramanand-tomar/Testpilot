@@ -3,7 +3,7 @@ import { db } from '@/db';
 import { users, repositories, schedules } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { parseExpression } from 'cron-parser';
+import parseExpression from 'cron-parser';
 
 export async function POST(req: Request) {
   const { userId } = await auth();
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   let nextRunAt = null;
   if (isActive !== false) {
     try {
-      const interval = parseExpression(cronExpression);
+      const interval = (parseExpression as any).parseExpression ? (parseExpression as any).parseExpression(cronExpression) : (parseExpression as any)(cronExpression);
       nextRunAt = interval.next().toDate();
     } catch (err) {
       return new Response('Invalid cron expression', { status: 400 });
