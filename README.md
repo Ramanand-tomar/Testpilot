@@ -240,7 +240,7 @@ To enable Scheduled Tests, Vercel Cron must be configured. The project includes 
   "crons": [
     {
       "path": "/api/cron/run-scheduled",
-      "schedule": "0 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
