@@ -63,6 +63,21 @@ export async function POST(req: Request) {
         return new Response('Database error', { status: 500 })
       }
     }
+  } else if (eventType === 'user.updated') {
+    const { email_addresses, first_name, last_name } = evt.data
+    const email = email_addresses[0]?.email_address
+    const name = [first_name, last_name].filter(Boolean).join(' ') || null
+
+    if (email) {
+      try {
+        await db.update(users)
+          .set({ name: name })
+          .where(eq(users.email, email))
+      } catch (error) {
+        console.error('Database error on user update:', error)
+        return new Response('Database error', { status: 500 })
+      }
+    }
   }
 
   return new Response('', { status: 200 })

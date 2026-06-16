@@ -6,7 +6,21 @@ import EditTestDialog from './modals/edit-test-dialog';
 import LogsModal from './modals/logs-modal';
 import { useState } from 'react';
 
-export default function TestCaseRow({ testCase, isSelected, onToggle, onUpdate }: { testCase: any, isSelected: boolean, onToggle: () => void, onUpdate: () => void }) {
+export default function TestCaseRow({ 
+  testCase, 
+  isSelected, 
+  onToggle, 
+  onUpdate,
+  globalInstruction,
+  knownIssues 
+}: { 
+  testCase: any, 
+  isSelected: boolean, 
+  onToggle: () => void, 
+  onUpdate: () => void,
+  globalInstruction?: string,
+  knownIssues?: string
+}) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLogsOpen, setIsLogsOpen] = useState(false);
 
@@ -40,8 +54,39 @@ export default function TestCaseRow({ testCase, isSelected, onToggle, onUpdate }
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${statusColors[testCase.status] || 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}>
             {testCase.status}
           </span>
+          {testCase.wasHealed && (
+            <span title="This test was automatically healed by AI" className="flex items-center gap-1 text-[10px] font-semibold tracking-wide text-amber-400 uppercase bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 cursor-help">
+              🔧 Healed
+            </span>
+          )}
+          {testCase.priority === 'high' && (
+            <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wide text-rose-400 uppercase bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> High
+            </span>
+          )}
+          {testCase.priority === 'medium' && (
+            <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wide text-amber-400 uppercase bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Medium
+            </span>
+          )}
+          {testCase.priority === 'low' && (
+            <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wide text-emerald-400 uppercase bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Low
+            </span>
+          )}
         </div>
-        <p className="text-sm text-zinc-500 mt-1 truncate">{testCase.targetRoute}</p>
+        <div className="flex items-center gap-2 mt-1.5">
+          <p className="text-sm text-zinc-500 truncate">{testCase.targetRoute}</p>
+          {testCase.tags && testCase.tags.length > 0 && (
+            <div className="flex items-center gap-1.5 border-l border-zinc-700 pl-2">
+              {testCase.tags.map((tag: string, i: number) => (
+                <span key={i} className="text-[10px] text-zinc-400 bg-zinc-800 px-1.5 py-0.5 rounded">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-2 ml-4">
@@ -62,7 +107,14 @@ export default function TestCaseRow({ testCase, isSelected, onToggle, onUpdate }
       </div>
 
       {isEditOpen && <EditTestDialog testCase={testCase} onClose={() => setIsEditOpen(false)} onUpdate={onUpdate} />}
-      {isLogsOpen && <LogsModal testCase={testCase} onClose={() => setIsLogsOpen(false)} />}
+      {isLogsOpen && (
+        <LogsModal 
+          testCase={testCase} 
+          globalInstruction={globalInstruction}
+          knownIssues={knownIssues}
+          onClose={() => setIsLogsOpen(false)} 
+        />
+      )}
     </div>
   );
 }

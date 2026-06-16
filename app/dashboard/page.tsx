@@ -34,12 +34,11 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-50 p-8">
-      <DashboardClient 
-        initialRepos={userRepos} 
-        credits={dbUser.credits} 
-        githubConnected={!!dbUser.githubToken} 
-      />
-    </main>
+    <DashboardClient 
+      initialRepos={userRepos} 
+      credits={dbUser.credits} 
+      githubConnected={!!dbUser.githubToken} 
+      plan={dbUser.plan}
+    />
   );
 }

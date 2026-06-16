@@ -62,6 +62,7 @@ export async function GET(req: Request) {
     where: eq(repositories.userId, dbUser.id),
     with: {
       testCases: true,
+      schedules: true,
     },
   });
 

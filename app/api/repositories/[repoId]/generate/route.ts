@@ -47,6 +47,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ repoId:
 You are a senior QA Automation Engineer.
 Based on the following repository files, generate 5-10 test cases.
 Global Instruction from user: ${repo.globalInstruction || 'None'}
+Known issues to be aware of: ${repo.knownIssues || 'None'}
 
 ${filesContext}
 
@@ -58,7 +59,8 @@ Output the test cases as a JSON array exactly matching this structure (no markdo
     "type": "UI" | "API" | "Authentication" | "Navigation" | "Form",
     "target_route": "/api/test or /dashboard",
     "expected_result": "What should happen",
-    "priority": "high" | "medium" | "low"
+    "priority": "high" | "medium" | "low",
+    "tags": ["auth", "critical", "api"]
   }
 ]
 `;
@@ -73,10 +75,10 @@ Output the test cases as a JSON array exactly matching this structure (no markdo
     return new Response('AI Provider Error: ' + (error.message || 'Service Unavailable'), { status: 503 });
   }
 
-  if (responseText.startsWith('\`\`\`json')) {
-    responseText = responseText.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '');
-  } else if (responseText.startsWith('\`\`\`')) {
-    responseText = responseText.replace(/^\`\`\`/, '').replace(/\`\`\`$/, '');
+  if (responseText.startsWith('```json')) {
+    responseText = responseText.replace(/^```json/, '').replace(/```$/, '');
+  } else if (responseText.startsWith('```')) {
+    responseText = responseText.replace(/^```/, '').replace(/```$/, '');
   }
 
   let generatedTests;
@@ -96,6 +98,8 @@ Output the test cases as a JSON array exactly matching this structure (no markdo
         type: tc.type,
         targetRoute: tc.target_route,
         expectedResult: tc.expected_result,
+        priority: tc.priority || 'medium',
+        tags: tc.tags || [],
         status: 'pending',
       }).returning();
       return newTc;
