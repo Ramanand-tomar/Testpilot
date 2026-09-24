@@ -11,11 +11,16 @@ export async function GET(req: Request) {
   }
 
   const clientId = process.env.GITHUB_CLIENT_ID;
-  const redirectUri = process.env.GITHUB_REDIRECT_URI;
   
-  if (!clientId || !redirectUri) {
-    return new Response("GitHub OAuth not configured", { status: 500 });
+  if (!clientId) {
+    return new Response("GitHub OAuth CLIENT_ID not configured", { status: 500 });
   }
+
+  // Derive redirectUri dynamically if not explicitly specified
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";
+  const proto = req.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
+  const fallbackRedirectUri = `${proto}://${host}/api/github/callback`;
+  const redirectUri = process.env.GITHUB_REDIRECT_URI || fallbackRedirectUri;
 
   const nonce = crypto.randomBytes(32).toString("hex");
   const cookieStore = await cookies();
