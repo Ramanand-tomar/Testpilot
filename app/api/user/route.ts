@@ -1,6 +1,6 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
-import { users, repositories, testCases } from '@/db/schema';
+import { users, repositories, testCases, testRuns, schedules, webhooks, notificationSettings } from '@/db/schema';
 import { eq, inArray } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
@@ -79,23 +79,13 @@ export async function DELETE() {
     });
     if (!dbUser) return new Response('Database user not found', { status: 404 });
 
-    // 1. Fetch user's repositories
-    const userRepos = await db
-      .select({ id: repositories.id })
-      .from(repositories)
-      .where(eq(repositories.userId, dbUser.id));
-
-    const repoIds = userRepos.map((r) => r.id);
-
-    // 2. Delete test cases belonging to user's repositories
-    if (repoIds.length > 0) {
-      await db.delete(testCases).where(inArray(testCases.repoId, repoIds));
-    }
-
-    // 3. Delete repositories
+    // Delete all dependent data cleanly
+    await db.delete(notificationSettings).where(eq(notificationSettings.userId, dbUser.id));
+    await db.delete(schedules).where(eq(schedules.userId, dbUser.id));
+    await db.delete(webhooks).where(eq(webhooks.userId, dbUser.id));
+    await db.delete(testCases).where(inArray(testCases.repoId, db.select({ id: repositories.id }).from(repositories).where(eq(repositories.userId, dbUser.id))));
+    await db.delete(testRuns).where(eq(testRuns.userId, dbUser.id));
     await db.delete(repositories).where(eq(repositories.userId, dbUser.id));
-
-    // 4. Delete the user row
     await db.delete(users).where(eq(users.id, dbUser.id));
 
     return NextResponse.json({ success: true });

@@ -58,7 +58,7 @@ export default function RepositoriesClient({
   // Poll repos if any test is running/pending
   useEffect(() => {
     const hasRunningTests = repos.some((r) =>
-      r.testCases?.some((t) => t.status === "running" || t.status === "pending")
+      r.testCases?.some((t) => t.status === "running")
     );
     if (!hasRunningTests) return;
 
@@ -134,7 +134,7 @@ export default function RepositoriesClient({
       {/* Repositories grid/list */}
       {repos.length === 0 ? (
         <div className="text-center py-20 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/[0.05] space-y-6">
-          <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-850 flex items-center justify-center mx-auto text-indigo-400">
+          <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-indigo-400">
             <GitBranch className="w-6 h-6" />
           </div>
           <div className="space-y-1.5 max-w-sm mx-auto">
@@ -149,7 +149,7 @@ export default function RepositoriesClient({
             {!isConnected ? (
               <a
                 href="/api/github/connect"
-                className="px-4 py-2 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition inline-flex items-center gap-1.5 shadow-md"
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition inline-flex items-center gap-1.5 shadow-md"
               >
                 <Github className="w-4.5 h-4.5" /> Connect GitHub <ArrowRight className="w-4 h-4 ml-0.5" />
               </a>
@@ -159,7 +159,7 @@ export default function RepositoriesClient({
           </div>
         </div>
       ) : filteredRepos.length === 0 ? (
-        <div className="text-center py-16 border border-zinc-850 rounded-2xl text-zinc-500 bg-zinc-900/[0.02]">
+        <div className="text-center py-16 border border-zinc-800 rounded-2xl text-zinc-500 bg-zinc-900/[0.02]">
           <p className="text-sm font-medium">No repositories match "{searchQuery}"</p>
         </div>
       ) : (

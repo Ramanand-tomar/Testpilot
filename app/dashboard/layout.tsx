@@ -1,11 +1,12 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { db } from '@/db';
-import { users, repositories } from '@/db/schema';
+import { repositories } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import Sidebar from '@/components/dashboard/sidebar';
 import Topbar from '@/components/dashboard/topbar';
 import { ToastProvider } from '@/components/dashboard/toast-provider';
+import { getOrCreateUser } from '@/lib/user-helper';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
@@ -15,18 +16,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const email = clerkUser?.emailAddresses[0]?.emailAddress;
   if (!email) redirect('/sign-in');
 
-  let dbUser = await db.query.users.findFirst({
-    where: eq(users.email, email)
-  });
-
-  if (!dbUser) {
-    const [newUser] = await db.insert(users).values({
-      name: [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || null,
-      email: email,
-      credits: 1000,
-    }).returning();
-    dbUser = newUser;
-  }
+  const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || null;
+  const dbUser = await getOrCreateUser(email, name);
 
   const repoCount = await db.query.repositories.findMany({
     where: eq(repositories.userId, dbUser.id)

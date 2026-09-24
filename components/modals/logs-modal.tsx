@@ -63,7 +63,7 @@ export default function LogsModal({
                   className={`py-3.5 px-4 text-sm font-semibold border-b-2 transition-all flex items-center gap-2 cursor-pointer -mb-px ${
                     activeTab === tab.id
                       ? 'border-indigo-500 text-indigo-400 font-bold'
-                      : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:border-zinc-850'
+                      : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:border-zinc-800'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -85,12 +85,12 @@ export default function LogsModal({
                   <div className="space-y-1">
                     {logs.map((log, i) => {
                       let colorClass = "text-zinc-300";
-                      if (log.toLowerCase().includes("error") || log.toLowerCase().includes("fail")) colorClass = "text-rose-450";
+                      if (log.toLowerCase().includes("error") || log.toLowerCase().includes("fail")) colorClass = "text-rose-400";
                       else if (log.toLowerCase().includes("success")) colorClass = "text-emerald-400";
                       
                       return (
                         <div key={i} className={`py-0.5 ${colorClass} leading-relaxed`}>
-                          <span className="text-zinc-650 select-none mr-3 inline-block w-8 text-right">{String(i + 1).padStart(3, '0')}</span>
+                          <span className="text-zinc-600 select-none mr-3 inline-block w-8 text-right">{String(i + 1).padStart(3, '0')}</span>
                           {log}
                         </div>
                       );
@@ -110,7 +110,7 @@ export default function LogsModal({
                   </div>
                 )}
                 {testCase.script ? (
-                  <pre className="font-mono text-xs overflow-auto whitespace-pre p-4 bg-zinc-950 rounded-lg border border-zinc-850 text-zinc-350 flex-1 min-h-[300px]">
+                  <pre className="font-mono text-xs overflow-auto whitespace-pre p-4 bg-zinc-950 rounded-lg border border-zinc-800 text-zinc-400 flex-1 min-h-[300px]">
                     <code>{testCase.script}</code>
                   </pre>
                 ) : (

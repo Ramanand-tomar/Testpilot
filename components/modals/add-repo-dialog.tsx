@@ -100,14 +100,15 @@ export default function AddRepoDialog({ githubConnected, onAdded }: { githubConn
                   ) : (
                     <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto p-2 border border-zinc-800 rounded-lg bg-zinc-900/50">
                       {filteredRepos.map(r => (
-                        <div 
+                        <button 
+                          type="button"
                           key={r.id} 
                           onClick={() => setSelectedRepo(r)}
-                          className={`p-3 rounded-md cursor-pointer border transition ${selectedRepo?.id === r.id ? 'bg-indigo-600/10 border-indigo-500' : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'}`}
+                          className={`p-3 rounded-md cursor-pointer border text-left w-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ${selectedRepo?.id === r.id ? 'bg-indigo-600/10 border-indigo-500' : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'}`}
                         >
                           <p className="text-sm font-medium text-zinc-100">{r.full_name}</p>
                           {r.description && <p className="text-xs text-zinc-500 mt-1 truncate">{r.description}</p>}
-                        </div>
+                        </button>
                       ))}
                     </div>
                   )}

@@ -114,7 +114,7 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
               <div className="space-y-3">
                 <Link
                   href="/pricing"
-                  className="w-full py-2.5 px-4 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition text-center shadow-md flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition text-center shadow-md flex items-center justify-center gap-1.5"
                 >
                   <Sparkles className="w-4 h-4" /> Upgrade to Pro Tier <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -124,7 +124,7 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
                 <button
                   onClick={handlePortalRedirect}
                   disabled={loadingPortal}
-                  className="w-full py-2.5 px-4 bg-zinc-850 hover:bg-zinc-800 text-zinc-200 border border-zinc-750 hover:border-zinc-700 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-2.5 px-4 bg-zinc-800 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 hover:border-zinc-700 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {loadingPortal && <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />}
                   Manage Billing
@@ -153,7 +153,7 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
             </div>
 
             <div className="space-y-2">
-              <div className="w-full bg-zinc-850 rounded-full h-2.5 overflow-hidden shadow-inner">
+              <div className="w-full bg-zinc-800 rounded-full h-2.5 overflow-hidden shadow-inner">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     dbUser.credits < 100 ? "bg-amber-500" : "bg-indigo-500"
@@ -175,7 +175,7 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
                 </div>
               </div>
             ) : (
-              <div className="p-3 bg-zinc-950/40 border border-zinc-850 rounded-xl flex gap-2.5 items-start text-zinc-450 text-xs leading-relaxed">
+              <div className="p-3 bg-zinc-950/40 border border-zinc-800 rounded-xl flex gap-2.5 items-start text-zinc-450 text-xs leading-relaxed">
                 <ShieldCheck className="w-4.5 h-4.5 text-indigo-400 shrink-0 mt-0.5" />
                 <div>
                   Your credits are automatically refilled on each monthly renewal period. Additional runtime runs can be bought.
@@ -222,9 +222,9 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
                   <th className="py-3 px-5 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-850">
+              <tbody className="divide-y divide-zinc-800">
                 {invoiceHistory.map((invoice, idx) => (
-                  <tr key={idx} className="hover:bg-zinc-850/20 transition duration-150">
+                  <tr key={idx} className="hover:bg-zinc-800/20 transition duration-150">
                     <td className="py-3.5 px-5 text-zinc-400 whitespace-nowrap">{invoice.date}</td>
                     <td className="py-3.5 px-5 font-medium text-zinc-200">{invoice.description}</td>
                     <td className="py-3.5 px-5 font-semibold text-zinc-100">{invoice.amount}</td>
@@ -232,8 +232,8 @@ export default function BillingClient({ dbUser, renewalDate, price }: BillingCli
                       <span
                         className={`inline-flex px-2 py-0.5 text-[10px] font-bold rounded-full border ${
                           invoice.status === "Paid"
-                            ? "bg-emerald-500/10 text-emerald-450 border-emerald-500/20"
-                            : "bg-rose-500/10 text-rose-450 border-rose-500/20"
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                            : "bg-rose-500/10 text-rose-400 border-rose-500/20"
                         }`}
                       >
                         {invoice.status}

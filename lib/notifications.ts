@@ -39,8 +39,9 @@ View full report here: ${shareUrl}
   // Email
   if (settings.emailEnabled && resend && userEmail) {
     try {
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'Testpilot Alerts <alerts@testpilot.dev>';
       await resend.emails.send({
-        from: 'Ai Testing Agent <onboarding@resend.dev>',
+        from: fromEmail,
         to: userEmail,
         subject,
         text: textBody,
@@ -50,18 +51,21 @@ View full report here: ${shareUrl}
     }
   }
 
-  // Slack
-  if (settings.slackWebhookUrl) {
-    try {
-      await fetch(settings.slackWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: `*${subject}*\n${textBody}`
-        })
-      });
-    } catch (e) {
-      console.error('Failed to send Slack message:', e);
+  // Slack (Verify URL domain is hooks.slack.com for security)
+  if (settings.slackWebhookUrl && typeof settings.slackWebhookUrl === 'string') {
+    const url = settings.slackWebhookUrl.trim();
+    if (url.startsWith('https://hooks.slack.com/')) {
+      try {
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: `*${subject}*\n${textBody}`
+          })
+        });
+      } catch (e) {
+        console.error('Failed to send Slack message:', e);
+      }
     }
   }
 }

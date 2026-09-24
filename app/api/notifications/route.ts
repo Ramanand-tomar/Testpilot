@@ -5,70 +5,91 @@ import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-  const { userId } = await auth();
-  if (!userId) return new Response('Unauthorized', { status: 401 });
+  try {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const clerkUser = await currentUser();
-  const email = clerkUser?.emailAddresses[0]?.emailAddress;
-  if (!email) return new Response('User email not found', { status: 400 });
+    const clerkUser = await currentUser();
+    const email = clerkUser?.emailAddresses[0]?.emailAddress;
+    if (!email) return NextResponse.json({ error: 'User email not found' }, { status: 400 });
 
-  const dbUser = await db.query.users.findFirst({
-    where: eq(users.email, email)
-  });
+    const dbUser = await db.query.users.findFirst({
+      where: eq(users.email, email)
+    });
 
-  if (!dbUser) return new Response('User not found', { status: 404 });
+    if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-  let settings = await db.query.notificationSettings.findFirst({
-    where: eq(notificationSettings.userId, dbUser.id)
-  });
+    let settings = await db.query.notificationSettings.findFirst({
+      where: eq(notificationSettings.userId, dbUser.id)
+    });
 
-  if (!settings) {
-    const [newSettings] = await db.insert(notificationSettings).values({
-      userId: dbUser.id,
-      emailEnabled: true,
-      notifyOn: 'all'
-    }).returning();
-    settings = newSettings;
+    if (!settings) {
+      const [newSettings] = await db.insert(notificationSettings).values({
+        userId: dbUser.id,
+        emailEnabled: true,
+        notifyOn: 'all'
+      }).returning();
+      settings = newSettings;
+    }
+
+    return NextResponse.json(settings);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  return NextResponse.json(settings);
 }
 
 export async function PATCH(req: Request) {
-  const { userId } = await auth();
-  if (!userId) return new Response('Unauthorized', { status: 401 });
+  try {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const clerkUser = await currentUser();
-  const email = clerkUser?.emailAddresses[0]?.emailAddress;
-  if (!email) return new Response('User email not found', { status: 400 });
+    const clerkUser = await currentUser();
+    const email = clerkUser?.emailAddresses[0]?.emailAddress;
+    if (!email) return NextResponse.json({ error: 'User email not found' }, { status: 400 });
 
-  const dbUser = await db.query.users.findFirst({
-    where: eq(users.email, email)
-  });
+    const dbUser = await db.query.users.findFirst({
+      where: eq(users.email, email)
+    });
 
-  if (!dbUser) return new Response('User not found', { status: 404 });
+    if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
-  const body = await req.json();
-  const { emailEnabled, slackWebhookUrl, notifyOn } = body;
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
 
-  const existing = await db.query.notificationSettings.findFirst({
-    where: eq(notificationSettings.userId, dbUser.id)
-  });
+    const { emailEnabled, slackWebhookUrl, notifyOn } = body || {};
 
-  if (existing) {
-    const [updated] = await db.update(notificationSettings).set({
-      emailEnabled: emailEnabled !== undefined ? emailEnabled : existing.emailEnabled,
-      slackWebhookUrl: slackWebhookUrl !== undefined ? slackWebhookUrl : existing.slackWebhookUrl,
-      notifyOn: notifyOn !== undefined ? notifyOn : existing.notifyOn
-    }).where(eq(notificationSettings.id, existing.id)).returning();
-    return NextResponse.json(updated);
-  } else {
-    const [created] = await db.insert(notificationSettings).values({
-      userId: dbUser.id,
-      emailEnabled: emailEnabled !== undefined ? emailEnabled : true,
-      slackWebhookUrl: slackWebhookUrl || null,
-      notifyOn: notifyOn || 'all'
-    }).returning();
-    return NextResponse.json(created);
+    if (slackWebhookUrl && typeof slackWebhookUrl === 'string') {
+      const url = slackWebhookUrl.trim();
+      if (url && !url.startsWith('https://hooks.slack.com/')) {
+        return NextResponse.json({ error: 'Slack webhook URL must start with https://hooks.slack.com/' }, { status: 400 });
+      }
+    }
+
+    const existing = await db.query.notificationSettings.findFirst({
+      where: eq(notificationSettings.userId, dbUser.id)
+    });
+
+    if (existing) {
+      const [updated] = await db.update(notificationSettings).set({
+        emailEnabled: emailEnabled !== undefined ? Boolean(emailEnabled) : existing.emailEnabled,
+        slackWebhookUrl: slackWebhookUrl !== undefined ? slackWebhookUrl : existing.slackWebhookUrl,
+        notifyOn: notifyOn !== undefined ? notifyOn : existing.notifyOn
+      }).where(eq(notificationSettings.id, existing.id)).returning();
+      return NextResponse.json(updated);
+    } else {
+      const [created] = await db.insert(notificationSettings).values({
+        userId: dbUser.id,
+        emailEnabled: emailEnabled !== undefined ? Boolean(emailEnabled) : true,
+        slackWebhookUrl: slackWebhookUrl || null,
+        notifyOn: notifyOn || 'all'
+      }).returning();
+      return NextResponse.json(created);
+    }
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

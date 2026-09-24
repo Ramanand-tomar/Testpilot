@@ -1,19 +1,20 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { users, repositories, testCases, testRuns } from '@/db/schema';
-import { eq, and, inArray, sql } from 'drizzle-orm';
+import { eq, and, inArray, gte, sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { getRepoFiles } from '@/lib/github';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Browserbase from '@browserbasehq/sdk';
 import { chromium } from 'playwright-core';
+import { expect } from '@playwright/test';
 import { sendRunNotifications } from '@/lib/notifications';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
 const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
 
 async function performRCA(tc: any, testRunId: number, repo: any, dbUser: any, filesContext: string, logs: string[], script: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
   const prompt = `A Playwright test failed. Classify the failure and provide root cause analysis.
 Return JSON only matching this schema:
 {
@@ -267,11 +268,28 @@ Make sure to handle standard interactions and await appropriately.
         logs.push(`[page error] ${err.message}`);
       });
 
+      let assertionsMade = 0;
+      const wrappedExpect = (actual: any) => {
+        assertionsMade++;
+        return expect(actual);
+      };
+      Object.assign(wrappedExpect, expect);
+
+      const customConsole = {
+        log: (...args: any[]) => logs.push(`[log] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ')}`),
+        error: (...args: any[]) => logs.push(`[error] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ')}`),
+        warn: (...args: any[]) => logs.push(`[warn] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ')}`),
+      };
+
       const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-      const executeTest = new AsyncFunction('page', script);
+      const executeTest = new AsyncFunction('page', 'expect', 'console', 'process', 'globalThis', 'fetch', `"use strict";\n${script}`);
       
       logs.push("Starting test execution...");
-      await executeTest(page);
+      await executeTest(page, wrappedExpect, customConsole, undefined, undefined, undefined);
+      
+      if (assertionsMade === 0) {
+        throw new Error("Test completed without making any assertions (expect checks). At least 1 assertion is required.");
+      }
       logs.push("Test execution completed successfully.");
 
       await db.update(testCases).set({ 
@@ -301,8 +319,7 @@ Make sure to handle standard interactions and await appropriately.
     }
 
     // Deduct 10 credits
-    currentCredits -= 10;
-    await db.update(users).set({ credits: currentCredits }).where(eq(users.id, dbUser.id));
+    await db.update(users).set({ credits: sql`${users.credits} - 10` }).where(and(eq(users.id, dbUser.id), gte(users.credits, 10)));
 
     results.push({ id: tc.id, status: 'complete' });
   }

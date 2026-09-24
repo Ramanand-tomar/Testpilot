@@ -14,7 +14,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
 const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
 
 async function performRCA(tc: any, testRunId: number, repo: any, dbUser: any, filesContext: string, logs: string[], script: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
   const prompt = `A Playwright test failed. Classify the failure and provide root cause analysis.
 Return JSON only matching this schema:
 {

@@ -1,7 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { users, repositories, testCases } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, gte, sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -25,7 +25,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ repoId:
 
   if (!dbUser) return new Response('User not found', { status: 404 });
 
-  if (dbUser.credits < 5) {
+  const updatedUsers = await db.update(users)
+    .set({ credits: sql`${users.credits} - 5` })
+    .where(and(eq(users.id, dbUser.id), gte(users.credits, 5)))
+    .returning();
+
+  if (updatedUsers.length === 0) {
     return new Response('Insufficient credits', { status: 402 });
   }
 
@@ -99,9 +104,7 @@ Output the test case as a JSON object exactly matching this structure (no markdo
     status: 'pending',
   }).returning();
 
-  await db.update(users)
-    .set({ credits: dbUser.credits - 5 })
-    .where(eq(users.id, dbUser.id));
+// Credits atomically deducted at start of process
 
   return NextResponse.json(newTc);
 }

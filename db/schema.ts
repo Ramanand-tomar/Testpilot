@@ -15,7 +15,7 @@ export const users = pgTable("users", {
 
 export const repositories = pgTable("repositories", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   repoId: text("repo_id").notNull(),
   fullName: text("full_name").notNull(),
   htmlUrl: text("html_url"),
@@ -30,8 +30,8 @@ export const repositories = pgTable("repositories", {
 
 export const testRuns = pgTable("test_runs", {
   id: serial("id").primaryKey(),
-  repoId: integer("repo_id").references(() => repositories.id).notNull(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  repoId: integer("repo_id").references(() => repositories.id, { onDelete: "cascade" }).notNull(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   status: text("status").default('running'),
   totalTests: integer("total_tests").default(0),
   passed: integer("passed").default(0),
@@ -44,8 +44,8 @@ export const testRuns = pgTable("test_runs", {
 
 export const testCases = pgTable("test_cases", {
   id: serial("id").primaryKey(),
-  repoId: integer("repo_id").references(() => repositories.id).notNull(),
-  runId: integer("run_id").references(() => testRuns.id),
+  repoId: integer("repo_id").references(() => repositories.id, { onDelete: "cascade" }).notNull(),
+  runId: integer("run_id").references(() => testRuns.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description"),
   type: text("type"),
@@ -69,8 +69,8 @@ export const testCases = pgTable("test_cases", {
 
 export const webhooks = pgTable("webhooks", {
   id: serial("id").primaryKey(),
-  repoId: integer("repo_id").references(() => repositories.id).notNull(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  repoId: integer("repo_id").references(() => repositories.id, { onDelete: "cascade" }).notNull(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   secret: text("secret").notNull().unique(),
   isActive: boolean("is_active").default(true).notNull(),
   lastTriggeredAt: timestamp("last_triggered_at"),
@@ -79,8 +79,8 @@ export const webhooks = pgTable("webhooks", {
 
 export const schedules = pgTable("schedules", {
   id: serial("id").primaryKey(),
-  repoId: integer("repo_id").references(() => repositories.id).notNull(),
-  userId: integer("user_id").references(() => users.id).notNull(),
+  repoId: integer("repo_id").references(() => repositories.id, { onDelete: "cascade" }).notNull(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
   cronExpression: text("cron_expression").notNull(),
   isActive: boolean("is_active").default(true).notNull(),
   lastRunAt: timestamp("last_run_at"),
@@ -90,7 +90,7 @@ export const schedules = pgTable("schedules", {
 
 export const notificationSettings = pgTable("notification_settings", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id).notNull().unique(),
+  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
   emailEnabled: boolean("email_enabled").default(true).notNull(),
   slackWebhookUrl: text("slack_webhook_url"),
   notifyOn: text("notify_on").default('all').notNull(),

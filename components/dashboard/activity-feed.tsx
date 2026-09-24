@@ -45,7 +45,7 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
       <div className="flex-1 divide-y divide-zinc-800/50 overflow-y-auto min-h-[300px]">
         {sortedRuns.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-8 text-zinc-500 min-h-[300px]">
-            <Play className="w-8 h-8 text-zinc-650 mb-2 opacity-50" />
+            <Play className="w-8 h-8 text-zinc-600 mb-2 opacity-50" />
             <p className="text-sm">No recent activity found.</p>
             <p className="text-xs text-zinc-600 mt-1">Run tests in your repositories to populate the feed.</p>
           </div>
@@ -56,7 +56,7 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
             const isRunning = run.status === "running" || run.status === "pending";
 
             return (
-              <div key={run.id} className="p-4 hover:bg-zinc-850/30 transition duration-150 flex items-center justify-between gap-4">
+              <div key={run.id} className="p-4 hover:bg-zinc-800/30 transition duration-150 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
                   {/* Status Badge */}
                   <div>
@@ -79,7 +79,7 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
                 <div className="flex-shrink-0 flex items-center gap-2">
                   <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${
                     isPass ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
-                    isFail ? "bg-rose-500/10 text-rose-450 border-rose-500/20" :
+                    isFail ? "bg-rose-500/10 text-rose-400 border-rose-500/20" :
                     isRunning ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20" :
                     "bg-zinc-800 text-zinc-400 border-zinc-700"
                   }`}>
@@ -98,7 +98,7 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
       <div className="p-4 bg-zinc-900/30 border-t border-zinc-800/80 text-center">
         <Link 
           href="/dashboard/repositories" 
-          className="text-xs font-semibold text-indigo-450 hover:text-indigo-400 transition"
+          className="text-xs font-semibold text-indigo-400 hover:text-indigo-400 transition"
         >
           View all in Repositories →
         </Link>

@@ -56,14 +56,14 @@ export default function Topbar({ user }: { user: any }) {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-8 h-8 rounded-full bg-indigo-650 hover:bg-indigo-600 text-white font-bold text-xs flex items-center justify-center cursor-pointer transition select-none outline-none border border-indigo-500/30 shadow-md"
+            className="w-8 h-8 rounded-full bg-indigo-600 hover:bg-indigo-600 text-white font-bold text-xs flex items-center justify-center cursor-pointer transition select-none outline-none border border-indigo-500/30 shadow-md"
           >
             {getInitials(user.name)}
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-xl bg-zinc-900 border border-zinc-850 shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-              <div className="px-4 py-2 border-b border-zinc-805/40">
+            <div className="absolute right-0 mt-2 w-56 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="px-4 py-2 border-b border-zinc-800/40">
                 <p className="text-sm font-semibold text-zinc-100 truncate">{user.name}</p>
                 <p className="text-xs text-zinc-400 truncate mt-0.5">{user.email}</p>
               </div>
@@ -85,10 +85,10 @@ export default function Topbar({ user }: { user: any }) {
                 </Link>
               </div>
 
-              <div className="border-t border-zinc-805/45 py-1">
+              <div className="border-t border-zinc-800/45 py-1">
                 <button
                   onClick={handleSignOut}
-                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-450 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer text-left font-medium"
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-rose-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer text-left font-medium"
                 >
                   <LogOut className="w-4 h-4" /> Sign Out
                 </button>

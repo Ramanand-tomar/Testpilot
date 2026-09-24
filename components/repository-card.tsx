@@ -56,8 +56,8 @@ export default function RepositoryCard({ repo, onUpdate }: { repo: any, onUpdate
       
       if (res.ok) {
         const data = await res.json();
-        const passed = data.results?.filter((r: any) => r.status === "pass").length || 0;
-        const failed = data.results?.filter((r: any) => r.status === "fail").length || 0;
+        const passed = data.passed ?? data.results?.filter((r: any) => r.status === "pass").length ?? 0;
+        const failed = data.failed ?? data.results?.filter((r: any) => r.status === "fail").length ?? 0;
         addToast(`Tests complete: ${passed} passed, ${failed} failed`, "success");
       } else {
         const errText = await res.text();

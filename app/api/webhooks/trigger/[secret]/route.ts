@@ -13,7 +13,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
 const bb = new Browserbase({ apiKey: process.env.BROWSERBASE_API_KEY });
 
 async function performRCA(tc: any, testRunId: number, repo: any, dbUser: any, filesContext: string, logs: string[], script: string) {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
   const prompt = `A Playwright test failed. Classify the failure and provide root cause analysis.
 Return JSON only matching this schema:
 {
@@ -144,10 +144,18 @@ export async function POST(
 
   if (!secret) return new Response('Missing secret', { status: 400 });
 
-  // Validate webhook secret
+  // Validate webhook secret (Header or URL path)
+  const authHeader = req.headers.get("authorization");
+  const bearerSecret = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  const targetSecret = bearerSecret || secret;
+
   const webhook = await db.query.webhooks.findFirst({
-    where: eq(webhooks.secret, secret)
+    where: eq(webhooks.secret, targetSecret)
   });
+
+  if (!webhook || !webhook.isActive) {
+    return NextResponse.json({ error: "Invalid or inactive webhook secret" }, { status: 401 });
+  }
 
   if (!webhook || !webhook.isActive) {
     return new Response('Invalid or inactive webhook', { status: 401 });

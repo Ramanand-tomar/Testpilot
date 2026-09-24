@@ -75,7 +75,7 @@ export default function DashboardClient({
   // Poll repos and user details if any test is running/pending
   useEffect(() => {
     const hasRunningTests = repos.some(r =>
-      r.testCases?.some(t => t.status === "running" || t.status === "pending")
+      r.testCases?.some(t => t.status === "running")
     );
     if (!hasRunningTests) return;
 
@@ -121,8 +121,8 @@ export default function DashboardClient({
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: "Total Tests", value: totalTests, icon: Activity, color: "text-zinc-150" },
-          { label: "Passed Runs", value: passedTests, icon: CheckCircle2, color: "text-emerald-450" },
-          { label: "Failed Runs", value: failedTests, icon: XCircle, color: "text-rose-450" },
+          { label: "Passed Runs", value: passedTests, icon: CheckCircle2, color: "text-emerald-400" },
+          { label: "Failed Runs", value: failedTests, icon: XCircle, color: "text-rose-400" },
           { label: "Pass Rate", value: `${passRate}%`, icon: TrendingUp, color: "text-indigo-400" },
           { 
             label: "Credits Remaining", 
@@ -152,7 +152,7 @@ export default function DashboardClient({
 
       {/* Quick Actions bar */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex items-center justify-between flex-wrap gap-4 bg-zinc-950/20">
-        <span className="text-sm font-semibold text-zinc-350 tracking-wide">Quick Actions</span>
+        <span className="text-sm font-semibold text-zinc-400 tracking-wide">Quick Actions</span>
         
         <div className="flex items-center gap-3">
           <AddRepoDialog githubConnected={isConnected} onAdded={refreshRepos} />
@@ -160,7 +160,7 @@ export default function DashboardClient({
           {!isConnected && (
             <a 
               href="/api/github/connect"
-              className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-750 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2"
+              className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2"
             >
               <GitBranch className="w-4 h-4" /> Connect GitHub
             </a>
@@ -169,7 +169,7 @@ export default function DashboardClient({
           {plan === "Free" && (
             <a 
               href="/pricing"
-              className="px-4 py-2 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition shadow-md inline-flex items-center gap-2"
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-600 text-white rounded-lg text-sm font-semibold transition shadow-md inline-flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" /> Upgrade Plan
             </a>
@@ -195,7 +195,7 @@ export default function DashboardClient({
 
           {/* Right Column: Repository Summary */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 space-y-4 shadow-sm flex flex-col h-full">
-            <div className="flex items-center justify-between border-b border-zinc-850 pb-3">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h3 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <GitBranch className="w-4 h-4 text-indigo-400" /> Repository Summary
               </h3>

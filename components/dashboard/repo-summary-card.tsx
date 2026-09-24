@@ -30,7 +30,7 @@ export default function RepoSummaryCard({ repo }: RepoSummaryProps) {
   return (
     <div
       onClick={handleCardClick}
-      className="p-4 bg-zinc-900/50 hover:bg-zinc-850/40 border border-zinc-800 hover:border-zinc-700 rounded-xl flex items-center justify-between gap-6 cursor-pointer transition-all duration-200 select-none group"
+      className="p-4 bg-zinc-900/50 hover:bg-zinc-800/40 border border-zinc-800 hover:border-zinc-700 rounded-xl flex items-center justify-between gap-6 cursor-pointer transition-all duration-200 select-none group"
     >
       <div className="flex-1 min-w-0 space-y-2.5">
         <div className="flex items-center gap-2 flex-wrap">
@@ -39,7 +39,7 @@ export default function RepoSummaryCard({ repo }: RepoSummaryProps) {
           </h4>
           
           {repo.language && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-zinc-800 text-zinc-350 border border-zinc-700">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700">
               {repo.language}
             </span>
           )}
@@ -82,7 +82,7 @@ export default function RepoSummaryCard({ repo }: RepoSummaryProps) {
         </div>
       </div>
 
-      <div className="text-zinc-500 group-hover:text-zinc-350 transition-colors flex-shrink-0">
+      <div className="text-zinc-500 group-hover:text-zinc-400 transition-colors flex-shrink-0">
         <ChevronRight className="w-5 h-5" />
       </div>
     </div>

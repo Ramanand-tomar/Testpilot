@@ -1,20 +1,41 @@
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
-import { clerkClient } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
 
 export async function GET(req: Request) {
+  const { userId: currentAuthUserId } = await auth();
   const url = new URL(req.url);
   const code = url.searchParams.get('code');
-  const clerkUserId = url.searchParams.get('state');
+  const stateParam = url.searchParams.get('state');
 
-  if (!code || !clerkUserId) {
+  if (!code || !stateParam) {
     return new Response('Missing code or state', { status: 400 });
   }
 
+  const [stateUserId, nonce] = stateParam.split(':');
+  if (!stateUserId || !nonce) {
+    return new Response('Invalid state format', { status: 400 });
+  }
+
+  // Verify state user matches current logged in Clerk user
+  if (currentAuthUserId && currentAuthUserId !== stateUserId) {
+    return new Response('State user mismatch (CSRF warning)', { status: 403 });
+  }
+
+  // Verify nonce cookie
+  const cookieStore = await cookies();
+  const savedNonce = cookieStore.get('github_oauth_nonce')?.value;
+  cookieStore.delete('github_oauth_nonce');
+
+  if (!savedNonce || savedNonce !== nonce) {
+    return new Response('Invalid or expired OAuth state nonce', { status: 403 });
+  }
+
   const client = await clerkClient();
-  const user = await client.users.getUser(clerkUserId);
+  const user = await client.users.getUser(stateUserId);
   const email = user.emailAddresses[0]?.emailAddress;
 
   if (!email) {

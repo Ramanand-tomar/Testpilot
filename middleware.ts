@@ -5,7 +5,10 @@ const isApiRoute = createRouteMatcher(['/api(.*)']);
 const isPublicApiRoute = createRouteMatcher([
   '/api/webhooks/clerk(.*)',
   '/api/webhooks/stripe(.*)',
-  '/api/webhooks/trigger(.*)'
+  '/api/webhooks/trigger(.*)',
+  '/api/reports(.*)',
+  '/report(.*)',
+  '/api/cron(.*)'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -16,9 +19,8 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
     '/((?!_next|[^?]*\\.(?:html|css|js|gif|svg|jpg|jpeg|png|woff|woff2|ico|csv|docx|xlsx|zip|webmanifest)).*)',
-    // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 };
+

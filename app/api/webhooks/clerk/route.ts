@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
+    return new Response('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local', { status: 500 })
   }
 
   const headerPayload = await headers()
@@ -23,9 +23,7 @@ export async function POST(req: Request) {
     })
   }
 
-  const payload = await req.json()
-  const body = JSON.stringify(payload)
-
+  const body = await req.text()
   const wh = new Webhook(WEBHOOK_SECRET)
 
   let evt: WebhookEvent
@@ -43,7 +41,6 @@ export async function POST(req: Request) {
     })
   }
 
-  const { id } = evt.data
   const eventType = evt.type
 
   if (eventType === 'user.created') {
@@ -76,6 +73,16 @@ export async function POST(req: Request) {
       } catch (error) {
         console.error('Database error on user update:', error)
         return new Response('Database error', { status: 500 })
+      }
+    }
+  } else if (eventType === 'user.deleted') {
+    const { email_addresses } = evt.data as any;
+    const email = email_addresses?.[0]?.email_address;
+    if (email) {
+      try {
+        await db.delete(users).where(eq(users.email, email))
+      } catch (error) {
+        console.error('Database error on user delete:', error)
       }
     }
   }

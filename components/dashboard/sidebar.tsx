@@ -20,7 +20,7 @@ export default function Sidebar({ user }: { user: any }) {
         {/* Logo */}
         <div className="h-14 px-6 border-b border-zinc-800/80 flex items-center gap-2.5">
           <span className="text-xl">⚡</span>
-          <span className="font-bold text-zinc-100 tracking-tight">AI Testing Agent</span>
+          <span className="font-bold text-zinc-100 tracking-tight">Testpilot</span>
         </div>
 
         {/* Nav Links */}
@@ -60,7 +60,7 @@ export default function Sidebar({ user }: { user: any }) {
       {/* Bottom User Card */}
       <div className="p-4 border-t border-zinc-800/80 bg-zinc-900/10">
         <div className="px-3 py-2.5 rounded-lg bg-zinc-900/40 border border-zinc-800 flex flex-col">
-          <p className="text-xs font-semibold text-zinc-350 truncate">{user.name}</p>
+          <p className="text-xs font-semibold text-zinc-400 truncate">{user.name}</p>
           <p className="text-[10px] text-zinc-500 truncate mt-0.5">{user.email}</p>
         </div>
       </div>

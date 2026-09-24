@@ -1,7 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/db';
 import { users, repositories, testCases } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, gte, sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { getRepoFiles } from '@/lib/github';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -28,7 +28,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ repoId:
     return new Response('User or GitHub token not found', { status: 404 });
   }
 
-  if (dbUser.credits < 50) {
+  const updatedUsers = await db.update(users)
+    .set({ credits: sql`${users.credits} - 50` })
+    .where(and(eq(users.id, dbUser.id), gte(users.credits, 50)))
+    .returning();
+
+  if (updatedUsers.length === 0) {
     return new Response('Insufficient credits', { status: 402 });
   }
 
@@ -106,9 +111,7 @@ Output the test cases as a JSON array exactly matching this structure (no markdo
     })
   );
 
-  await db.update(users)
-    .set({ credits: dbUser.credits - 50 })
-    .where(eq(users.id, dbUser.id));
+// Credits atomically deducted at start of process
 
   return NextResponse.json(insertedTests);
 }

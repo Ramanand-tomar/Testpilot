@@ -175,13 +175,13 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
       <div className="space-y-6">
         {/* Section 1: User Profile */}
         <form onSubmit={handleSaveProfile} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6 shadow-sm transition hover:border-zinc-700">
-          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-850 pb-3">
+          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-800 pb-3">
             <User className="w-5 h-5 text-indigo-400" /> User Profile
           </h3>
 
           <div className="flex items-center gap-5 flex-wrap">
             {/* Avatar Circle */}
-            <div className="w-16 h-16 rounded-full bg-indigo-650 text-white font-bold text-xl flex items-center justify-center border border-indigo-500/30 shadow-md">
+            <div className="w-16 h-16 rounded-full bg-indigo-600 text-white font-bold text-xl flex items-center justify-center border border-indigo-500/30 shadow-md">
               {getInitials(displayName || dbUser.email)}
             </div>
 
@@ -206,7 +206,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
             
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider select-none">Email Address</label>
-              <div className="w-full bg-zinc-950 border border-zinc-850 text-zinc-500 rounded-xl px-4 py-3 text-sm select-all cursor-not-allowed">
+              <div className="w-full bg-zinc-950 border border-zinc-800 text-zinc-500 rounded-xl px-4 py-3 text-sm select-all cursor-not-allowed">
                 {dbUser.email}
               </div>
             </div>
@@ -223,7 +223,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
             <button
               type="submit"
               disabled={savingProfile}
-              className="px-4 py-2.5 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
             >
               {savingProfile ? (
                 <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -237,7 +237,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
 
         {/* Section 2: GitHub Integration */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4 shadow-sm transition hover:border-zinc-700">
-          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-850 pb-3">
+          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-800 pb-3">
             <Github className="w-5 h-5 text-indigo-400" /> GitHub Authentication
           </h3>
 
@@ -246,11 +246,11 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-semibold text-zinc-200">Repository Import Integration</span>
                 {githubConnected ? (
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-450 border border-emerald-500/20">
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     Connected as @{githubUser || "username"}
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-zinc-850 text-zinc-500 border border-zinc-800">
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-zinc-800 text-zinc-500 border border-zinc-800">
                     Disconnected
                   </span>
                 )}
@@ -272,7 +272,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
               ) : (
                 <a
                   href="/api/github/connect"
-                  className="px-3.5 py-1.5 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold transition shadow-md inline-flex items-center"
+                  className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold transition shadow-md inline-flex items-center"
                 >
                   Connect GitHub
                 </a>
@@ -283,7 +283,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
 
         {/* Section 2.5: Notifications */}
         <form onSubmit={handleSaveNotifications} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6 shadow-sm transition hover:border-zinc-700">
-          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-850 pb-3">
+          <h3 className="text-lg font-semibold text-zinc-200 flex items-center gap-2 border-b border-zinc-800 pb-3">
             <Bell className="w-5 h-5 text-indigo-400" /> Notifications
           </h3>
 
@@ -333,7 +333,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
             <button
               type="submit"
               disabled={savingNotifications}
-              className="px-4 py-2.5 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-600 text-white rounded-xl text-sm font-semibold transition flex items-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
             >
               {savingNotifications ? (
                 <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -347,7 +347,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
 
         {/* Section 3: Danger Zone */}
         <div className="bg-zinc-900 border border-red-950/40 rounded-2xl p-6 space-y-4 shadow-sm transition hover:border-red-900/30 bg-red-950/[0.01]">
-          <h3 className="text-lg font-semibold text-rose-450 flex items-center gap-2 border-b border-red-950/40 pb-3">
+          <h3 className="text-lg font-semibold text-rose-400 flex items-center gap-2 border-b border-red-950/40 pb-3">
             <ShieldAlert className="w-5 h-5" /> Danger Zone
           </h3>
 
@@ -361,7 +361,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
 
             <Dialog.Root open={showDeleteModal} onOpenChange={setShowDeleteModal}>
               <Dialog.Trigger asChild>
-                <button className="px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-450 hover:text-rose-450 rounded-xl text-xs font-semibold border border-rose-500/25 transition cursor-pointer shadow-sm">
+                <button className="px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-400 rounded-xl text-xs font-semibold border border-rose-500/25 transition cursor-pointer shadow-sm">
                   Delete Account
                 </button>
               </Dialog.Trigger>
@@ -370,7 +370,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
                 <Dialog.Overlay className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 animate-in fade-in duration-200" />
                 <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-zinc-950 border border-red-950/50 rounded-2xl shadow-2xl z-50 p-6 flex flex-col gap-6 animate-in zoom-in-95 duration-200">
                   <div className="flex gap-3">
-                    <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-450 self-start">
+                    <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 self-start">
                       <AlertTriangle className="w-6 h-6" />
                     </div>
                     <div className="space-y-1">
@@ -383,7 +383,7 @@ export default function SettingsClient({ dbUser, githubUsername }: SettingsClien
 
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                      Type <span className="text-rose-450">DELETE</span> to confirm
+                      Type <span className="text-rose-400">DELETE</span> to confirm
                     </label>
                     <input
                       type="text"
