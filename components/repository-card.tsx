@@ -1,6 +1,6 @@
-import * as Dialog from "@radix-ui/react-dialog";
 "use client";
 
+import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import TestCaseRow from "./test-case-row";
 import { Loader2, Trash2, Clock, AlertTriangle } from "lucide-react";
