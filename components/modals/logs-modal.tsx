@@ -30,7 +30,7 @@ export default function LogsModal({
     <Dialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col h-[80vh] max-h-[80vh] overflow-hidden">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-4xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col h-[85vh] max-h-[90dvh] overflow-hidden">
           {/* Header */}
           <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/30">
             <div>

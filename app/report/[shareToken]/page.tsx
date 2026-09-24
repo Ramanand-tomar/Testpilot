@@ -69,7 +69,7 @@ export default function ReportPage({ params }: { params: Promise<{ shareToken: s
           </div>
         </header>
 
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="flex flex-col-reverse md:grid md:grid-cols-4 gap-8">
           {/* Main Content */}
           <div className="md:col-span-3 space-y-6">
             <h2 className="text-lg font-semibold text-zinc-100">Test Cases ({report.testCases.length})</h2>
@@ -77,7 +77,16 @@ export default function ReportPage({ params }: { params: Promise<{ shareToken: s
               {report.testCases.map((tc: any) => (
                 <div 
                   key={tc.id} 
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={activeTest?.id === tc.id}
                   onClick={() => setActiveTest(activeTest?.id === tc.id ? null : tc)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveTest(activeTest?.id === tc.id ? null : tc);
+                    }
+                  }}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     activeTest?.id === tc.id 
                       ? 'bg-zinc-900 border-zinc-700' 

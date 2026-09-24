@@ -75,7 +75,7 @@ export default function TestCaseRow({
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 mt-1.5">
+        <div className="flex flex-wrap items-center gap-2 mt-1.5 min-w-0">
           <p className="text-sm text-zinc-500 truncate">{testCase.targetRoute}</p>
           {testCase.tags && testCase.tags.length > 0 && (
             <div className="flex items-center gap-1.5 border-l border-zinc-700 pl-2">

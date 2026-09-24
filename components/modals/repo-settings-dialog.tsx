@@ -62,7 +62,7 @@ export default function RepoSettingsDialog({ repo, onUpdated }: { repo: any, onU
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 p-6 flex flex-col max-h-[85vh]">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-xl max-h-[90dvh] overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 p-6 flex flex-col max-h-[85vh]">
           <div className="flex justify-between items-center mb-6">
             <Dialog.Title className="text-xl font-semibold text-zinc-100">Repository Settings</Dialog.Title>
             <Dialog.Close asChild>

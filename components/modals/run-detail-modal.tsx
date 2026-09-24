@@ -28,7 +28,7 @@ export default function RunDetailModal({ runId, onClose }: { runId: number, onCl
     <Dialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col h-[90vh] overflow-hidden">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-6xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col h-[90vh] max-h-[90dvh] overflow-hidden">
           
           <div className="flex justify-between items-center p-6 border-b border-zinc-800 bg-zinc-900/50">
             <div>

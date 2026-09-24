@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 interface RepoSummaryProps {
@@ -16,21 +16,15 @@ interface RepoSummaryProps {
 }
 
 export default function RepoSummaryCard({ repo }: RepoSummaryProps) {
-  const router = useRouter();
-
   const testCases = repo.testCases || [];
   const testCount = testCases.length;
   const passedCount = testCases.filter((t) => t.status === "pass").length;
   const failedCount = testCases.filter((t) => t.status === "fail").length;
 
-  const handleCardClick = () => {
-    router.push("/dashboard/repositories");
-  };
-
   return (
-    <div
-      onClick={handleCardClick}
-      className="p-4 bg-zinc-900/50 hover:bg-zinc-800/40 border border-zinc-800 hover:border-zinc-700 rounded-xl flex items-center justify-between gap-6 cursor-pointer transition-all duration-200 select-none group"
+    <Link
+      href="/dashboard/repositories"
+      className="p-4 bg-zinc-900/50 hover:bg-zinc-800/40 border border-zinc-800 hover:border-zinc-700 rounded-xl flex items-center justify-between gap-6 cursor-pointer transition-all duration-200 select-none group block"
     >
       <div className="flex-1 min-w-0 space-y-2.5">
         <div className="flex items-center gap-2 flex-wrap">
@@ -85,6 +79,6 @@ export default function RepoSummaryCard({ repo }: RepoSummaryProps) {
       <div className="text-zinc-500 group-hover:text-zinc-400 transition-colors flex-shrink-0">
         <ChevronRight className="w-5 h-5" />
       </div>
-    </div>
+    </Link>
   );
 }

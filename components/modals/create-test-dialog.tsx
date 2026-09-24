@@ -48,7 +48,7 @@ export default function CreateTestDialog({ repo, onCreated }: { repo: any, onCre
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col overflow-hidden">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-xl shadow-xl z-50 flex flex-col overflow-hidden">
           
           <div className="flex justify-between items-center p-5 border-b border-zinc-800 bg-zinc-900/50">
             <div>

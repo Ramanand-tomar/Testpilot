@@ -118,7 +118,7 @@ export default function DashboardClient({
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {[
           { label: "Total Tests", value: totalTests, icon: Activity, color: "text-zinc-150" },
           { label: "Passed Runs", value: passedTests, icon: CheckCircle2, color: "text-emerald-400" },
@@ -141,10 +141,10 @@ export default function DashboardClient({
               }`}
             >
               <div className="flex justify-between items-center">
-                <span className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">{stat.label}</span>
+                <span className="text-[10px] sm:text-xs text-zinc-500 font-semibold uppercase tracking-wider truncate" title={stat.label}>{stat.label}</span>
                 <Icon className={`w-4 h-4 ${stat.color}`} />
               </div>
-              <p className={`text-3xl font-extrabold tracking-tight ${stat.color}`}>{stat.value}</p>
+              <p className={`text-2xl sm:text-3xl font-extrabold tracking-tight truncate ${stat.color}`}>{stat.value}</p>
             </div>
           );
         })}

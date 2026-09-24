@@ -36,11 +36,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
+      <div className="fixed bottom-4 right-4 left-4 sm:left-auto z-[100] flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md" aria-live="polite" aria-atomic="true">
         {toasts.map(toast => (
           <div 
             key={toast.id} 
-            className={`pointer-events-auto flex items-start justify-between gap-3 px-4 py-3 rounded-xl shadow-xl border text-sm font-medium animate-in slide-in-from-right-8 fade-in duration-300 w-80 
+            role="status"
+            className={`pointer-events-auto flex items-start justify-between gap-3 px-4 py-3 rounded-xl shadow-xl border text-sm font-medium animate-in slide-in-from-bottom-4 sm:slide-in-from-right-8 fade-in duration-300 w-full sm:w-80 
               ${toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/30 text-emerald-100' : 
                 toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/30 text-rose-100' : 
                 'bg-indigo-950/90 border-indigo-500/30 text-indigo-100'}`}
@@ -51,7 +52,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               {toast.type === 'info' && <Info className="w-4 h-4 text-indigo-400 shrink-0" />}
               <span className="leading-snug">{toast.message}</span>
             </div>
-            <button onClick={() => removeToast(toast.id)} className="text-zinc-400 hover:text-zinc-100 transition shrink-0 mt-0.5">
+            <button onClick={() => removeToast(toast.id)} aria-label="Close notification" className="text-zinc-400 hover:text-zinc-100 transition shrink-0 mt-0.5 cursor-pointer">
               <X className="w-4 h-4" />
             </button>
           </div>

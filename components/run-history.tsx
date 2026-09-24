@@ -64,13 +64,13 @@ export default function RunHistory({ repoId }: { repoId: number }) {
           ) : (
             <div className="flex flex-col gap-2">
               {runs.map((run) => (
-                <div key={run.id} className="flex items-center justify-between p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-700 transition">
+                <div key={run.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-700 transition gap-3">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col items-center justify-center w-10 h-10 bg-zinc-950 rounded-full border border-zinc-800">
                       <span className="text-xs font-bold text-zinc-400">#{run.id}</span>
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-zinc-800/60 pt-2 sm:pt-0">
                         <span className={`px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded border ${
                           run.status === 'complete' && run.failed === 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                           run.status === 'complete' && run.failed > 0 ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :

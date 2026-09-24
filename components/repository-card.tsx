@@ -1,8 +1,9 @@
+import * as Dialog from "@radix-ui/react-dialog";
 "use client";
 
 import { useState } from "react";
 import TestCaseRow from "./test-case-row";
-import { Loader2, Trash2, Clock } from "lucide-react";
+import { Loader2, Trash2, Clock, AlertTriangle } from "lucide-react";
 import RepoSettingsDialog from "./modals/repo-settings-dialog";
 import AiReportModal from "./modals/ai-report-modal";
 import WebhookDialog from "./modals/webhook-dialog";
@@ -16,6 +17,7 @@ export default function RepositoryCard({ repo, onUpdate }: { repo: any, onUpdate
   const [isGenerating, setIsGenerating] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTests, setSelectedTests] = useState<number[]>([]);
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -107,7 +109,7 @@ export default function RepositoryCard({ repo, onUpdate }: { repo: any, onUpdate
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-sm">
-      <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50">
+      <div className="p-4 sm:p-6 border-b border-zinc-800 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-zinc-900/50">
         <div>
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-semibold text-zinc-100">{repo.fullName}</h2>
@@ -122,7 +124,7 @@ export default function RepositoryCard({ repo, onUpdate }: { repo: any, onUpdate
             {repo.targetDomain}
           </a>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full xl:w-auto">
           <RepoSettingsDialog repo={repo} onUpdated={onUpdate} />
           <button 
             onClick={handleDelete} 

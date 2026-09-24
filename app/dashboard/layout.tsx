@@ -36,10 +36,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <ToastProvider>
       <div className="flex h-screen bg-zinc-950 text-zinc-50 overflow-hidden font-sans">
         <Sidebar user={serializedUser} />
-        <div className="flex flex-col flex-1 overflow-hidden">
+        <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
           <Topbar user={serializedUser} />
-          <main className="flex-1 overflow-y-auto p-8 bg-[#09090b]">
-            {children}
+          <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#09090b]">
+            <div className="max-w-7xl mx-auto w-full min-w-0">
+              {children}
+            </div>
           </main>
         </div>
       </div>
