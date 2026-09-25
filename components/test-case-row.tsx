@@ -32,8 +32,11 @@ export default function TestCaseRow({
   };
 
   return (
-    <div className="flex items-center px-6 py-4 hover:bg-zinc-800/50 transition">
-      <div className="flex-shrink-0 mr-4">
+    <div 
+      onClick={() => setIsLogsOpen(true)}
+      className="flex items-center px-6 py-4 hover:bg-zinc-800/60 transition cursor-pointer group"
+    >
+      <div className="flex-shrink-0 mr-4" onClick={(e) => e.stopPropagation()}>
         <Checkbox.Root 
           checked={isSelected}
           onCheckedChange={onToggle}
@@ -47,7 +50,7 @@ export default function TestCaseRow({
       
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-3">
-          <p className="text-sm font-medium text-zinc-100 truncate">{testCase.title}</p>
+          <p className="text-sm font-medium text-zinc-100 group-hover:text-indigo-400 transition truncate">{testCase.title}</p>
           <span className="px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-semibold bg-zinc-800 text-zinc-400">
             {testCase.type}
           </span>
@@ -91,14 +94,14 @@ export default function TestCaseRow({
 
       <div className="flex items-center gap-2 ml-4">
         <button 
-          onClick={() => setIsLogsOpen(true)}
+          onClick={(e) => { e.stopPropagation(); setIsLogsOpen(true); }}
           className="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-md transition"
           title="View Logs"
         >
           <FileText className="w-4 h-4" />
         </button>
         <button 
-          onClick={() => setIsEditOpen(true)}
+          onClick={(e) => { e.stopPropagation(); setIsEditOpen(true); }}
           className="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-md transition"
           title="Edit Test"
         >

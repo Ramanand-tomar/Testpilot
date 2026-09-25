@@ -66,7 +66,7 @@ export default function RepositoryCard({ repo, onUpdate }: { repo: any, onUpdate
         if (res.status === 402 || res.status === 403 || errText.toLowerCase().includes("credit")) {
           addToast("Not enough credits. Upgrade your plan.", "error");
         } else {
-          addToast("Failed to run tests.", "error");
+          addToast(errText || "Failed to run tests.", "error");
         }
       }
     } catch (e) {

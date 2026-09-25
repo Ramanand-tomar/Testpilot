@@ -63,7 +63,7 @@ export default function PricingSection() {
   ];
 
   const handleSubscribe = async (priceId: string, planName: string) => {
-    if (!isSignedIn) {
+    if (!isSignedIn && process.env.NODE_ENV === 'production') {
       router.push(`/sign-in?redirect_url=/pricing`);
       return;
     }

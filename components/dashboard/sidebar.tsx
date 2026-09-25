@@ -80,7 +80,7 @@ export function SidebarContent({ user, onNavigate }: { user: any; onNavigate?: (
 
       {/* Bottom User Card */}
       <div className="p-4 border-t border-zinc-800/80 bg-zinc-900/10">
-        <div className="px-3 py-2.5 rounded-lg bg-zinc-900/40 border border-zinc-800 flex flex-col">
+        <div className="px-3 py-2.5 rounded-lg bg-zinc-900/40 border border-zinc-800 flex flex-col min-w-0">
           <p className="text-xs font-semibold text-zinc-400 truncate">{user.name}</p>
           <p className="text-[10px] text-zinc-500 truncate mt-0.5">{user.email}</p>
         </div>

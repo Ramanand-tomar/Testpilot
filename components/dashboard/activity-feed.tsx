@@ -53,17 +53,19 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
           sortedRuns.map((run) => {
             const isPass = run.status === "pass";
             const isFail = run.status === "fail";
-            const isRunning = run.status === "running" || run.status === "pending";
+            const isRunning = run.status === "running";
+            const isPending = run.status === "pending";
 
             return (
               <div key={run.id} className="p-4 hover:bg-zinc-800/30 transition duration-150 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
-                  {/* Status Badge */}
+                  {/* Status Badge Icon */}
                   <div>
                     {isPass && <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />}
                     {isFail && <XCircle className="w-5 h-5 text-rose-500 flex-shrink-0" />}
                     {isRunning && <Loader2 className="w-5 h-5 text-indigo-500 animate-spin flex-shrink-0" />}
-                    {!isPass && !isFail && !isRunning && <Clock className="w-5 h-5 text-zinc-500 flex-shrink-0" />}
+                    {isPending && <Clock className="w-5 h-5 text-amber-400 flex-shrink-0" />}
+                    {!isPass && !isFail && !isRunning && !isPending && <Clock className="w-5 h-5 text-zinc-500 flex-shrink-0" />}
                   </div>
                   
                   <div className="min-w-0">
@@ -77,10 +79,11 @@ export default function ActivityFeed({ testCases }: { testCases: TestCase[] }) {
                 </div>
 
                 <div className="flex-shrink-0 flex items-center gap-2">
-                  <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${
+                  <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full border ${
                     isPass ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
                     isFail ? "bg-rose-500/10 text-rose-400 border-rose-500/20" :
                     isRunning ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20" :
+                    isPending ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
                     "bg-zinc-800 text-zinc-400 border-zinc-700"
                   }`}>
                     {run.status}
